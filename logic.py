@@ -1,4 +1,5 @@
 from copy import deepcopy
+from itertools import chain
 
 
 class GameState:
@@ -40,6 +41,11 @@ class GameState:
         max_index = self.BOARD_SIZE - 1
         return list(self._state[max_index - i][i] for i in range(self.BOARD_SIZE))
 
+    @property
+    def is_full(self):
+        symbols = len(list(filter(None, chain(*self._state))))
+        return symbols == self.BOARD_SIZE ** 2
+
     def __str__(self):
         line = ' -' * (1 + 2 * self.BOARD_SIZE)
         sep = ' | '
@@ -67,6 +73,10 @@ class GameLogic:
     @property
     def state(self):
         return self._state
+
+    @property
+    def has_ended(self):
+        return self._state.is_full or bool(self.winner)
 
     @property
     def winner(self):
