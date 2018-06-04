@@ -65,6 +65,10 @@ class GameLogic:
         self._state = GameState()
 
     @property
+    def state(self):
+        return self._state
+
+    @property
     def winner(self):
         patterns = [
             *self._state.rows,
