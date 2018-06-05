@@ -1,13 +1,9 @@
-from random import shuffle
+from random import choice
 
 
 class RandomPlayer:
-    def __init__(self):
-        self._valid_moves = list(range(1, 10))
-
     def make_move(self, state):
-        shuffle(self._valid_moves)
-        return self._valid_moves.pop()
+        return choice(state.empty_cells)
 
 
 class HumanPlayer:

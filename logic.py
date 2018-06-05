@@ -43,8 +43,12 @@ class GameState:
 
     @property
     def is_full(self):
-        symbols = len(list(filter(None, chain(*self._state))))
-        return symbols == self.BOARD_SIZE ** 2
+        return not bool(self.empty_cells)
+
+    @property
+    def empty_cells(self):
+        start, stop = 1, self.BOARD_SIZE ** 2
+        return [cell for cell in range(start, stop + 1) if self.cell(cell) is self.EMPTY_SYMBOL]
 
     def __str__(self):
         line = ' -' * (1 + 2 * self.BOARD_SIZE)
