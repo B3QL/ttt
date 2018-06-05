@@ -1,9 +1,13 @@
-from random import randint
+from random import shuffle
 
 
 class RandomPlayer:
+    def __init__(self):
+        self._valid_moves = list(range(1, 10))
+
     def make_move(self, state):
-        return randint(1, 9)
+        shuffle(self._valid_moves)
+        return self._valid_moves.pop()
 
 
 class HumanPlayer:
