@@ -9,4 +9,10 @@ class RandomPlayer:
 class HumanPlayer:
     def make_move(self, state):
         print(state)
-        return int(input('Choose cell [1-9]: '))
+        cell = None
+        while not cell:
+            try:
+                cell = int(input('Choose cell [1-9]: '))
+            except ValueError:
+                pass
+        return cell
