@@ -9,11 +9,10 @@ def play(x_player, o_player):
         (o_player, game.putO)
     ])
 
-    player, game_action = next(players)
+    player, make_action = next(players)
     while not game.has_ended:
-        cell = player.make_move(game.state)
-        if game_action(cell):
-            player, game_action = next(players)
+        if player.make_move(game, make_action):
+            player, make_action = next(players)
     return game
 
 

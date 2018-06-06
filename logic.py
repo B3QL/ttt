@@ -82,7 +82,7 @@ class GameLogic:
 
     @property
     def state(self):
-        return self._state
+        return deepcopy(self._state)
 
     @property
     def has_ended(self):
