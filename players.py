@@ -53,7 +53,9 @@ class QLearningPlayer:
             rate_action = 0
 
         learned_value = reward + self._gamma * rate_action
-        self._q_table[state][action] = (1 - self._alpha) * self._Q(state, action) + self._alpha * learned_value
+        new_value = (1 - self._alpha) * self._Q(state, action) + self._alpha * learned_value
+        self._q_table[state][action] = new_value
+        return new_value
 
     def _Q(self, state, action):
         return self._q_table.get(state, {})[action]
@@ -68,3 +70,27 @@ class QLearningPlayer:
     @property
     def q_table(self):
         return self._q_table
+
+
+class BackpropagatedQlearningPlayer(QLearningPlayer):
+    def __init__(self, *args, **kwargs):
+        super(BackpropagatedQlearningPlayer, self).__init__(*args, **kwargs)
+        self._last = []
+
+    def make_move(self, game, put_symbol):
+        state = game.state
+        best_action = self._pi(state)
+        if random() < self._eps or best_action is None:
+            best_action = choice(state.empty_cells)
+            self._q_table[state][best_action] = 0
+
+        result = put_symbol(best_action)
+        if result:
+            next_state = game.state
+            self._last.append((state, next_state, best_action))
+        return result
+
+    def reward(self, value):
+        for event in reversed(self._last):
+            value = self._learn(*event, reward=value)
+        self._last = []
