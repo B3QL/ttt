@@ -60,11 +60,17 @@ class GameState:
             board.append(line)
         return '\n'.join(board)
 
+    def _state_repr(self):
+        return ''.join(map(lambda x: str(x) if x != self.EMPTY_SYMBOL else '-', chain(*self._state)))
+
     def __repr__(self):
-        return '<{0.__class__.__name__} {0.BOARD_SIZE}x{0.BOARD_SIZE}>'.format(self)
+        return '<{0.__class__.__name__} {0.BOARD_SIZE}x{0.BOARD_SIZE} [{1}]>'.format(self, self._state_repr())
 
     def __eq__(self, other):
-        return isinstance(other, self.__class__) and self._state == other._state
+        return hash(self) == hash(other)
+
+    def __hash__(self):
+        return hash(self._state_repr())
 
 
 class GameLogic:
