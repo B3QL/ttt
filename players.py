@@ -2,13 +2,24 @@ from collections import defaultdict
 from random import choice, random
 
 
-class RandomPlayer:
+class Player:
+    def make_move(self, game, put_symbol):
+        pass
+
+    def reward(self, value):
+        pass
+
+    def reset(self):
+        pass
+
+
+class RandomPlayer(Player):
     def make_move(self, game, put_symbol):
         cell = choice(game.state.empty_cells)
         return put_symbol(cell)
 
 
-class HumanPlayer:
+class HumanPlayer(Player):
     def make_move(self, game, put_symbol):
         print(game.state)
         cell = None
@@ -20,7 +31,7 @@ class HumanPlayer:
         return put_symbol(cell)
 
 
-class QLearningPlayer:
+class QLearningPlayer(Player):
     def __init__(self, learning_rate=0.1, discount_factor=0.1, exploration_factor=0.1):
         self._alpha = learning_rate
         self._gamma = discount_factor
@@ -93,4 +104,7 @@ class BackpropagatedQlearningPlayer(QLearningPlayer):
     def reward(self, value):
         for event in reversed(self._last):
             value = self._learn(*event, reward=value)
+        self.reset()
+
+    def reset(self):
         self._last = []
